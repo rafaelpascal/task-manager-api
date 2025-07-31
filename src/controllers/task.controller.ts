@@ -80,10 +80,8 @@ export const createTask = (req: Request, res: Response, next: NextFunction) => {
   try {
     const { title, description, status } = req.body;
 
-    if (!title || !description || !status) {
-      return next(
-        new ValidationError("Title, description, and status are required.")
-      );
+    if (!title || !status) {
+      return next(new ValidationError("Title and status are required."));
     }
 
     const newTask: Task = {
