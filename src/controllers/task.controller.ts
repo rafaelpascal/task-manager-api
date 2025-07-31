@@ -139,14 +139,13 @@ export const updateTask = (req: Request, res: Response, next: NextFunction) => {
  * @apiError (404) {Object} error Task not found
  * @apiError (500) {Object} error Internal server error
  */
-
 export const deleteTask = (req: Request, res: Response, next: NextFunction) => {
   try {
     const index = tasks.findIndex((t) => t.id === req.params.id);
     if (index === -1) return res.status(404).json({ error: "Task not found" });
 
     tasks.splice(index, 1);
-    res.status(204).send();
+    res.status(204).send({ message: "Task deleted" });
   } catch (error) {
     next(error);
   }
