@@ -9,7 +9,6 @@ import { Request, Response, NextFunction } from "express";
  * @param res - The Express Response object.
  * @param next - The next middleware function in the stack.
  */
-
 export const logger = (req: Request, res: Response, next: NextFunction) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
   next();

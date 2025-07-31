@@ -55,8 +55,10 @@ export const getTaskById = (
 ) => {
   try {
     const task = tasks.find((t) => t.id === req.params.id);
-    if (!task) return res.status(404).json({ error: "Task not found" });
-    res.json(task);
+    if (!task) {
+      return res.status(404).json({ error: "Task not found" });
+    }
+    return res.status(200).json(task);
   } catch (error) {
     next(error);
   }
@@ -79,7 +81,9 @@ export const createTask = (req: Request, res: Response, next: NextFunction) => {
     const { title, description, status } = req.body;
 
     if (!title || !description || !status) {
-      return next(new ValidationError("Missing required fields!"));
+      return next(
+        new ValidationError("Title, description, and status are required.")
+      );
     }
 
     const newTask: Task = {
@@ -92,7 +96,10 @@ export const createTask = (req: Request, res: Response, next: NextFunction) => {
     };
 
     tasks.push(newTask);
-    res.status(201).json(newTask);
+    return res.status(201).json({
+      message: "Task created successfully",
+      data: newTask,
+    });
   } catch (error) {
     next(error);
   }
@@ -115,15 +122,22 @@ export const createTask = (req: Request, res: Response, next: NextFunction) => {
 export const updateTask = (req: Request, res: Response, next: NextFunction) => {
   try {
     const task = tasks.find((t) => t.id === req.params.id);
-    if (!task) return res.status(404).json({ error: "Task not found" });
+    if (!task) {
+      return res.status(404).json({ error: "Task not found" });
+    }
 
     const { title, description, status } = req.body;
-    if (title) task.title = title;
+
+    if (title !== undefined) task.title = title;
     if (description !== undefined) task.description = description;
-    if (status) task.status = status;
+    if (status !== undefined) task.status = status;
 
     task.updatedAt = new Date();
-    res.json(task);
+
+    return res.status(200).json({
+      message: "Task updated successfully",
+      data: task,
+    });
   } catch (error) {
     next(error);
   }
@@ -133,19 +147,20 @@ export const updateTask = (req: Request, res: Response, next: NextFunction) => {
  * @api {delete} /tasks/:id Delete a task
  * @apiName DeleteTask
  * @apiGroup Tasks
- * @apiDescription Delete a specific task by its ID.
+ * @apiDescription Delete a task by its ID.
  * @apiParam (Path) {string} id Task ID
- * @apiSuccess (204) NoContent Task successfully deleted
+ * @apiSuccess {String} message Success message
  * @apiError (404) {Object} error Task not found
  * @apiError (500) {Object} error Internal server error
  */
+
 export const deleteTask = (req: Request, res: Response, next: NextFunction) => {
   try {
     const index = tasks.findIndex((t) => t.id === req.params.id);
     if (index === -1) return res.status(404).json({ error: "Task not found" });
 
     tasks.splice(index, 1);
-    res.status(204).send({ message: "Task deleted" });
+    return res.status(200).json({ message: "Task deleted successfully" });
   } catch (error) {
     next(error);
   }
