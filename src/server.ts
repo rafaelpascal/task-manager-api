@@ -6,6 +6,7 @@ config();
 
 // Swagger docs
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
