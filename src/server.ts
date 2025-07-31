@@ -4,7 +4,9 @@ import swaggerFile from "./swagger-output.json";
 import { config } from "dotenv";
 config();
 
-// Swagger docs
+app.get("/", (req, res) => {
+  res.send("Hello Friend!!👋, Welcome to grada HQ Task manager api.");
+});
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 const PORT = process.env.PORT || 4000;
