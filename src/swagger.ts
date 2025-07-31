@@ -3,7 +3,7 @@ import swaggerAutogen from "swagger-autogen";
 const doc = {
   info: {
     title: "Task Manager API",
-    description: "API documentation",
+    description: "Task Manager API documentation",
   },
   host: "localhost:6001",
   schemes: ["http"],
